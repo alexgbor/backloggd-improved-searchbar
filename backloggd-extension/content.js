@@ -9,7 +9,7 @@ class BackloggdExtension {
     this.injectionTimer = null;
     this.isInjecting = false;
     
-    // Detectar si el contexto de la extensión es válido
+    // Detect invalid context (e.g., extension uninstalled)
     try {
       if (chrome?.runtime?.id) {
         this.init();
@@ -32,7 +32,7 @@ class BackloggdExtension {
     }
   }
 
-  // Verificar si el contexto sigue siendo válido
+  // Verify if extension context is still valid
   isContextValid() {
     try {
       return chrome?.runtime?.id !== undefined;
