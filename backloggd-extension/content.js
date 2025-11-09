@@ -8,7 +8,7 @@ class BackloggdExtension {
     this.lastUrl = location.href;
     this.injectionTimer = null;
     this.isInjecting = false;
-    
+
     // Detect invalid context (e.g., extension uninstalled)
     try {
       if (chrome?.runtime?.id) {
@@ -21,11 +21,11 @@ class BackloggdExtension {
   }
 
   // ========== Initialization ==========
-  
+
   init() {
     this.injectStyles();
     this.username = this.getUsernameFromPath();
-    
+
     if (this.username) {
       this.checkAndInject();
       this.startUrlMonitoring();
@@ -59,7 +59,7 @@ class BackloggdExtension {
   }
 
   // ========== Storage Helpers ==========
-  
+
   getStorageKeys() {
     return {
       games: `backloggd_games_${this.username}`,
@@ -69,7 +69,7 @@ class BackloggdExtension {
 
   async getStoredData() {
     if (!this.isContextValid()) return { games: null, cacheTime: null };
-    
+
     const keys = this.getStorageKeys();
     return new Promise(resolve => {
       try {
@@ -87,7 +87,7 @@ class BackloggdExtension {
 
   async saveGames(games) {
     if (!this.isContextValid()) return;
-    
+
     const keys = this.getStorageKeys();
     return new Promise(resolve => {
       try {
@@ -102,7 +102,7 @@ class BackloggdExtension {
   }
 
   // ========== URL & Navigation ==========
-  
+
   getUsernameFromPath() {
     const pathParts = window.location.pathname.split('/');
     return pathParts[2] || null;
@@ -111,7 +111,7 @@ class BackloggdExtension {
   startUrlMonitoring() {
     setInterval(() => {
       if (!this.isContextValid()) return;
-      
+
       if (location.href !== this.lastUrl) {
         this.handleNavigation();
       }
@@ -121,7 +121,7 @@ class BackloggdExtension {
   handleNavigation() {
     this.lastUrl = location.href;
     this.cleanup();
-    
+
     this.username = this.getUsernameFromPath();
     if (!this.username) return;
 
@@ -135,7 +135,7 @@ class BackloggdExtension {
     }
 
     this.isInjecting = false;
-    
+
     const existing = document.getElementById('backloggd-extension');
     if (existing) {
       existing.remove();
@@ -153,7 +153,7 @@ class BackloggdExtension {
         clearInterval(this.injectionTimer);
         return;
       }
-      
+
       if (this.isInjecting) return;
 
       attempts++;
@@ -181,7 +181,7 @@ class BackloggdExtension {
   }
 
   // ========== Scraping & Data Loading ==========
-  
+
   async fetchPage(url) {
     const response = await fetch(url);
     if (!response.ok) {
@@ -193,17 +193,17 @@ class BackloggdExtension {
   parseGamesFromDocument(doc) {
     const games = [];
     const cards = doc.querySelectorAll('#user-games-library-container .rating-hover .card');
-    
+
     cards.forEach(card => {
       const gameId = card.getAttribute('game_id');
       const rating = card.dataset.rating ? (card.dataset.rating / 2) : undefined;
       const title = card.querySelector('.game-text-centered')?.textContent.trim();
       const link = card.querySelector('a.cover-link')?.getAttribute('href');
       const slug = link?.replace('/games/', '').replace(/\/$/, '');
-      
+
       games.push({ id: gameId, rating, title, slug });
     });
-    
+
     return games;
   }
 
@@ -215,7 +215,7 @@ class BackloggdExtension {
         return match ? parseInt(match[1], 10) : null;
       })
       .filter(n => n !== null);
-    
+
     return pageNumbers.length ? Math.max(...pageNumbers) : 1;
   }
 
@@ -226,13 +226,13 @@ class BackloggdExtension {
 
     try {
       this.updateLoader(loader, 'Loading page 1...');
-      
+
       const firstHtml = await this.fetchPage(`${baseUrl}?page=1`);
       const parser = new DOMParser();
       const firstDoc = parser.parseFromString(firstHtml, 'text/html');
-      
+
       allGames.push(...this.parseGamesFromDocument(firstDoc));
-      
+
       const maxPages = this.getMaxPages(firstDoc);
 
       for (let page = 2; page <= maxPages; page++) {
@@ -243,11 +243,11 @@ class BackloggdExtension {
       }
 
       await this.saveGames(allGames);
-      
+
       this.hideLoader(loader);
       this.updateCacheInfo();
       this.showMessage(`Load complete: ${allGames.length} games cached.`, 'info');
-      
+
     } catch (error) {
       this.hideLoader(loader);
       this.showMessage('Error loading games. Check your connection or if the user exists.', 'error');
@@ -256,7 +256,7 @@ class BackloggdExtension {
   }
 
   // ========== Utilities ==========
-  
+
   debounce(func, wait) {
     let timeout;
     return (...args) => {
@@ -264,9 +264,9 @@ class BackloggdExtension {
       timeout = setTimeout(() => func.apply(this, args), wait);
     };
   }
-  
+
   // ========== Search ==========
-  
+
   normalizeText(text) {
     return text
       .toLowerCase()
@@ -276,7 +276,7 @@ class BackloggdExtension {
       .replace(/\s+/g, ' ')
       .trim();
   }
-  
+
   async searchGames(query) {
     const normalizedQuery = this.normalizeText(query);
     if (!normalizedQuery) return [];
@@ -288,17 +288,17 @@ class BackloggdExtension {
 
     return games.filter(game => {
       const normalizedTitle = this.normalizeText(game.title);
-      
+
       if (searchTerms.length > 1) {
         return searchTerms.every(term => normalizedTitle.includes(term));
       }
-      
+
       return normalizedTitle.includes(normalizedQuery);
     });
   }
 
   // ========== UI Updates ==========
-  
+
   updateLoader(loader, text) {
     if (loader) {
       loader.style.display = 'inline';
@@ -315,7 +315,7 @@ class BackloggdExtension {
   showMessage(text, type = 'info') {
     const msgEl = document.getElementById('message');
     if (!msgEl) return;
-    
+
     msgEl.textContent = text;
     msgEl.style.color = type === 'error' ? 'red' : 'green';
   }
@@ -323,13 +323,13 @@ class BackloggdExtension {
   async updateCacheInfo() {
     const searchInput = document.getElementById('searchInput');
     const infoEl = document.getElementById('cacheInfo');
-    
+
     if (!searchInput || !infoEl) return;
 
     searchInput.value = '';
-    
+
     const { games, cacheTime } = await this.getStoredData();
-    
+
     if (!games) {
       infoEl.textContent = 'No games loaded.';
       searchInput.disabled = true;
@@ -343,19 +343,19 @@ class BackloggdExtension {
 
   getTimeAgo(cacheTime) {
     if (!cacheTime) return 'unknown';
-    
+
     const diffMs = Date.now() - parseInt(cacheTime);
     const diffMin = Math.floor(diffMs / 60000);
-    
-    return diffMin < 60 
-      ? `${diffMin} min` 
+
+    return diffMin < 60
+      ? `${diffMin} min`
       : `${Math.floor(diffMin / 60)} h`;
   }
 
   displayResults(games) {
     const resultsEl = document.getElementById('results');
     const searchInfo = document.getElementById('searchInfo');
-    
+
     if (!resultsEl || !searchInfo) return;
 
     resultsEl.innerHTML = '';
@@ -364,27 +364,27 @@ class BackloggdExtension {
     games.forEach(game => {
       const li = document.createElement('li');
       const stars = this.formatRating(game.rating);
-      
+
       li.innerHTML = `
         <strong>${game.title}</strong> (${stars}) 
         <a href="https://backloggd.com/games/${game.slug}" target="_blank">link</a>
       `;
-      
+
       resultsEl.appendChild(li);
     });
   }
 
   formatRating(rating) {
     if (!rating) return 'No rating';
-    
+
     const filled = Math.round(rating);
     const empty = 5 - filled;
-    
+
     return '★'.repeat(filled) + '☆'.repeat(empty);
   }
 
   // ========== UI Injection ==========
-  
+
   checkAndInject() {
     const mainEl = document.querySelector('main');
     if (mainEl) {
@@ -421,7 +421,7 @@ class BackloggdExtension {
     `;
 
     const randomId = Math.random().toString(36).substr(2, 9);
-    
+
     container.innerHTML = `
       <h2 style="margin:0 0 12px 0; font-size:1.1em; text-align:center; color:#9ca3af; font-weight:600;">
         🎮 ${this.username}'s Library
@@ -567,7 +567,7 @@ class BackloggdExtension {
 
         const results = await this.searchGames(query);
         this.displayResults(results);
-        
+
         if (results.length > 0) {
           resultsEl.style.display = 'block';
         }

@@ -64,6 +64,12 @@ A Chrome extension that adds a powerful search functionality to Backloggd game l
 
 Feel free to open issues or submit pull requests!
 
+## Support
+
+If you find this extension useful, consider supporting its development:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/link_z)
+
 ## Credits
 
 Created for the Backloggd community to enhance the game library browsing experience.

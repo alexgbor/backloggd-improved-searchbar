@@ -6,6 +6,7 @@
   "permissions": [
     "storage"
   ],
+  "homepage_url": "https://github.com/alexgbor/backloggd-improved-searchbar",
   "content_scripts": [
     {
       "matches": [
