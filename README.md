@@ -69,10 +69,6 @@ A Chrome extension that adds a powerful search functionality to your Backloggd g
 
 Feel free to open issues or submit pull requests!
 
-## License
-
-MIT License - feel free to use and modify as you wish.
-
 ## Credits
 
 Created for the Backloggd community to enhance the game library browsing experience.
