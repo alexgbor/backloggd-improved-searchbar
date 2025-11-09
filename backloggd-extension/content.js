@@ -424,7 +424,7 @@ class BackloggdExtension {
     
     container.innerHTML = `
       <h2 style="margin:0 0 12px 0; font-size:1.1em; text-align:center; color:#9ca3af; font-weight:600;">
-        🎮 Game Search
+        🎮 ${this.username}'s Library
       </h2>
       
       <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
@@ -438,7 +438,7 @@ class BackloggdExtension {
           cursor: pointer;
           font-weight: 500;
           transition: background 0.2s;
-        ">Update user list</button>
+        ">Load games</button>
         
         <span id="loader" style="display:none; color:#9ca3af;">⏳ Loading...</span>
         
