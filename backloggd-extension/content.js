@@ -255,8 +255,18 @@ class BackloggdExtension {
     }
   }
 
+  // ========== Utilities ==========
+  
+  debounce(func, wait) {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+  }
+  
   // ========== Search ==========
-
+  
   normalizeText(text) {
     return text
       .toLowerCase()
@@ -548,9 +558,7 @@ class BackloggdExtension {
     }
 
     if (searchInput) {
-      searchInput.addEventListener('input', async (e) => {
-        const query = e.target.value;
-        
+      const debouncedSearch = this.debounce(async (query) => {
         if (!query.trim()) {
           this.displayResults([]);
           resultsEl.style.display = 'none';
@@ -563,6 +571,10 @@ class BackloggdExtension {
         if (results.length > 0) {
           resultsEl.style.display = 'block';
         }
+      }, 150);
+
+      searchInput.addEventListener('input', (e) => {
+        debouncedSearch(e.target.value);
       });
     }
 
