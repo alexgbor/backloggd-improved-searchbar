@@ -59,12 +59,6 @@ A Chrome extension that adds a powerful search functionality to your Backloggd g
 2. Go to `chrome://extensions/`
 3. Click the refresh icon on the extension card
 
-## Known Limitations
-
-- Only works on user profile pages (`/u/username/*`)
-- Requires manual update to refresh the game list
-- Cache is per-user (switching profiles requires a new cache)
-
 ## Contributing
 
 Feel free to open issues or submit pull requests!
