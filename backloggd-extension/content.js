@@ -256,17 +256,35 @@ class BackloggdExtension {
   }
 
   // ========== Search ==========
+
+  normalizeText(text) {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9\s]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
   
   async searchGames(query) {
-    const normalizedQuery = query.toLowerCase().trim();
+    const normalizedQuery = this.normalizeText(query);
     if (!normalizedQuery) return [];
 
     const { games } = await this.getStoredData();
     if (!games) return [];
 
-    return games.filter(game => 
-      game.title.toLowerCase().includes(normalizedQuery)
-    );
+    const searchTerms = normalizedQuery.split(' ').filter(term => term.length > 0);
+
+    return games.filter(game => {
+      const normalizedTitle = this.normalizeText(game.title);
+      
+      if (searchTerms.length > 1) {
+        return searchTerms.every(term => normalizedTitle.includes(term));
+      }
+      
+      return normalizedTitle.includes(normalizedQuery);
+    });
   }
 
   // ========== UI Updates ==========
