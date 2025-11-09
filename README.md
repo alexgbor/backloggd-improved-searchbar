@@ -1,12 +1,12 @@
 # Backloggd SearchBar
 
-A Chrome extension that adds a powerful search functionality to your Backloggd game library. Search through all your games instantly without having to scroll through pages.
+A Chrome extension that adds a powerful search functionality to Backloggd game libraries. Search through any user's games instantly without having to scroll through pages.
 
 ## Features
 
-- 🔍 **Fast Search**: Search through your entire game library instantly
+- 🔍 **Fast Search**: Search through any user's game library instantly
 - 💾 **Local Caching**: Games are cached locally for quick access
-- ⭐ **Rating Display**: See your ratings for each game in the results
+- ⭐ **Rating Display**: See ratings for each game in the results
 - 🎨 **Dark Theme**: Matches Backloggd's interface seamlessly
 - 🔄 **Auto-Update**: Works across page navigation within Backloggd
 
@@ -17,13 +17,13 @@ A Chrome extension that adds a powerful search functionality to your Backloggd g
 3. Open Chrome and go to `chrome://extensions/`
 4. Enable **Developer mode** (toggle in the top right)
 5. Click **Load unpacked** and select the **backloggd-extension** folder
-6. Navigate to any Backloggd user profile page (e.g., `https://backloggd.com/u/yourusername`)
+6. Navigate to any Backloggd user profile page (e.g., `https://backloggd.com/u/username`)
 
 ## Usage
 
 1. Visit any user's game library on Backloggd (`https://backloggd.com/u/username`)
 2. The search bar will appear at the top of the page
-3. Click **Update** to cache all games from that user's library (this may take a few seconds for large collections)
+3. Click **Load games** to cache all games from that user's library (this may take a few seconds for large collections)
 4. Once loaded, start typing in the search box to filter games instantly
 5. Click on any game link in the results to visit its page
 
@@ -47,7 +47,7 @@ A Chrome extension that adds a powerful search functionality to your Backloggd g
 
 ## Permissions
 
-- `storage`: To cache your games locally for fast search
+- `storage`: To cache game libraries locally for fast search
 
 ## Development
 
