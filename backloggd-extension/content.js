@@ -23,16 +23,15 @@ class BackloggdExtension {
   // ========== Initialization ==========
 
   init() {
-    this.injectStyles();
-    this.username = this.getUsernameFromPath();
+    this.startUrlMonitoring();
 
-    if (this.username) {
+    if (this.isUserPage()) {
+      this.injectStyles();
+      this.username = this.getUsernameFromPath();
       this.checkAndInject();
-      this.startUrlMonitoring();
     }
   }
 
-  // Verify if extension context is still valid
   isContextValid() {
     try {
       return chrome?.runtime?.id !== undefined;
@@ -122,9 +121,12 @@ class BackloggdExtension {
     this.lastUrl = location.href;
     this.cleanup();
 
-    this.username = this.getUsernameFromPath();
-    if (!this.username) return;
+    if (!this.isUserPage()) return;
 
+    this.injectStyles();
+    this.username = this.getUsernameFromPath();
+
+    this.checkAndInject();
     setTimeout(() => this.retryInjection(), 400);
   }
 
@@ -263,6 +265,10 @@ class BackloggdExtension {
       clearTimeout(timeout);
       timeout = setTimeout(() => func.apply(this, args), wait);
     };
+  }
+
+  isUserPage() {
+    return /^\/u\/[^\/]+/.test(window.location.pathname);
   }
 
   // ========== Search ==========

@@ -10,7 +10,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://backloggd.com/u/*"
+        "https://backloggd.com/*",
+        "https://www.backloggd.com/*"
       ],
       "js": [
         "content.js"
