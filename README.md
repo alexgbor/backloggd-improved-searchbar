@@ -13,10 +13,11 @@ A Chrome extension that adds a powerful search functionality to your Backloggd g
 ## Installation
 
 1. Download or clone this repository
-2. Open Chrome and go to `chrome://extensions/`
-3. Enable **Developer mode** (toggle in the top right)
-4. Click **Load unpacked** and select the **backloggd-extension** folder
-5. Navigate to any Backloggd user profile page (e.g., `https://backloggd.com/u/yourusername`)
+2. Optional: If you downloaded a **zip file**, extract it to get the **backloggd-extension** folder
+3. Open Chrome and go to `chrome://extensions/`
+4. Enable **Developer mode** (toggle in the top right)
+5. Click **Load unpacked** and select the **backloggd-extension** folder
+6. Navigate to any Backloggd user profile page (e.g., `https://backloggd.com/u/yourusername`)
 
 ## Usage
 
