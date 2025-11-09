@@ -8,6 +8,7 @@ class BackloggdExtension {
     this.lastUrl = location.href;
     this.injectionTimer = null;
     this.isInjecting = false;
+    this.isLoadingGames = false;
 
     // Detect invalid context (e.g., extension uninstalled)
     try {
@@ -222,11 +223,13 @@ class BackloggdExtension {
   }
 
   async loadAllGames() {
+    if (this.isLoadingGames) return;
     const loader = document.getElementById('loader');
     const baseUrl = `https://backloggd.com/u/${this.username}/games`;
     const allGames = [];
 
     try {
+      this.isLoadingGames = true;
       this.updateLoader(loader, 'Loading page 1...');
 
       const firstHtml = await this.fetchPage(`${baseUrl}?page=1`);
@@ -254,6 +257,8 @@ class BackloggdExtension {
       this.hideLoader(loader);
       this.showMessage('Error loading games. Check your connection or if the user exists.', 'error');
       console.error('Load error:', error);
+    } finally {
+      this.isLoadingGames = false;
     }
   }
 
