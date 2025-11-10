@@ -30,6 +30,8 @@ class BackloggdExtension {
       this.injectStyles();
       this.username = this.getUsernameFromPath();
       this.checkAndInject();
+    } else {
+      this.removeStyles();
     }
   }
 
@@ -56,6 +58,15 @@ class BackloggdExtension {
       }
     `;
     document.head.appendChild(style);
+  }
+
+  removeStyles() {
+    const styles = document.head.querySelectorAll('style');
+    styles.forEach(style => {
+      if (style.textContent.includes('main::before')) {
+        style.remove();
+      }
+    });
   }
 
   // ========== Storage Helpers ==========
@@ -143,6 +154,8 @@ class BackloggdExtension {
     if (existing) {
       existing.remove();
       document.querySelector('main')?.classList.remove('has-extension');
+    } else {
+      this.removeStyles();
     }
   }
 
