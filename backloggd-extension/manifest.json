@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Backloggd SearchBar",
   "version": "1.0",
-  "description": "Busca y cachea juegos de Backloggd desde un popup",
+  "description": "Browse and cache games from Backloggd profiles using this search bar.",
   "permissions": [
     "storage"
   ],
