@@ -254,10 +254,25 @@ class BackloggdExtension {
       const maxPages = this.getMaxPages(firstDoc);
 
       for (let page = 2; page <= maxPages; page++) {
-        this.updateLoader(loader, `Loading page ${page} of ${maxPages}...`);
-        const html = await this.fetchPage(`${baseUrl}?page=${page}`);
-        const doc = parser.parseFromString(html, 'text/html');
-        allGames.push(...this.parseGamesFromDocument(doc));
+        let pageRetries = 3;
+        while (pageRetries > 0) {
+          this.updateLoader(loader, `Loading page ${page} of ${maxPages}...`);
+          const html = await this.fetchPage(`${baseUrl}?page=${page}`);
+          const doc = parser.parseFromString(html, 'text/html');
+          const currentGames = this.parseGamesFromDocument(doc);
+          if (!currentGames.length) {
+            pageRetries--;
+            if (pageRetries === 0) {
+              throw new Error(`Failed to load page ${page}`);
+            } else {
+              this.updateLoader(loader, `Retrying page ${page}...`);
+              await new Promise(resolve => setTimeout(resolve, 8000));
+              continue;
+            }
+          }
+          allGames.push(...currentGames);
+          break;
+        }
       }
 
       await this.saveGames(allGames);
